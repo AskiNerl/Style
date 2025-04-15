@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n="title">Style - Онлайн магазин</title>
+    <!-- Подключение AOS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css">
+    <style>
+        /* Общие стили */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', sans-serif;
+        }
+        body {
+            background: #f4f4f4;
+            color: #333;
+            line-height: 1.6;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        body.dark {
+            background-color: #121212;
+            color: #fff;
+        }
+        header {
+            background: #111;
+            color: white;
+            padding: 1.5rem;
+            text-align: center;
+        }
+        header h1 {
+            font-size: 2.5rem;
+        }
+        header p {
+            font-size: 1.2rem;
+            color: #ddd;
+        }
+        .main-section {
+            padding: 2rem;
+            text-align: center;
+        }
+        .products {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-top: 30px;
+        }
+        .product-card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: transform 0.3s ease, background-color 0.3s;
+        }
+        body.dark .product-card {
+            background-color: #1e1e1e;
+            color: #fff;
+        }
+        .product-card img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+        }
+        .product-card:hover {
+            transform: translateY(-10px);
+        }
+        .product-info {
+            padding: 1rem;
+        }
+        .product-info h3 {
+            font-size: 1.4rem;
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+        body.dark .product-info h3 {
+            color: #fff;
+        }
+        .product-info p {
+            color: #666;
+            margin-bottom: 0.5rem;
+        }
+        body.dark .product-info p {
+            color: #eee;
+        }
+        .product-info .price {
+            font-size: 1.6rem;
+            font-weight: bold;
+            color: #0c9cde;
+        }
+        body.dark .product-info .price {
+            color: #5ce1e6;
+        }
+        .footer {
+            background: inherit;
+            color: white;
+            text-align: center;
+            padding: 1rem;
+            margin-top: 2rem;
+        }
+        .contact-section {
+            background: #0c9cde;
+            color: white;
+            padding: 3rem 1rem;
+            text-align: center;
+        }
+        .contact-section h2 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+        .contact-section ul {
+            list-style: none;
+            padding: 0;
+        }
+        .contact-section li {
+            margin: 1rem 0;
+        }
+        .contact-section a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .contact-section a:hover {
+            text-decoration: underline;
+        }
+        .product-info button {
+            background-color: #0c9cde;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+        .product-info button:hover {
+            background-color: #0277bd;
+            transform: translateY(-3px);
+        }
+        .product-info button:active {
+            background-color: #01579b;
+            transform: translateY(1px);
+        }
+        .product-info button:focus {
+            outline: none;
+            box-shadow: 0 0 5px rgba(12, 156, 222, 0.5);
+        }
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2rem;
+            }
+            header p {
+                font-size: 1rem;
+            }
+            .products {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .product-card img {
+                height: 200px;
+            }
+            .product-info h3 {
+                font-size: 1.2rem;
+            }
+            .product-info p {
+                font-size: 0.9rem;
+            }
+            .product-info .price {
+                font-size: 1.4rem;
+            }
+        }
+        @media (max-width: 480px) {
+            header h1 {
+                font-size: 1.5rem;
+            }
+            header p {
+                font-size: 1rem;
+            }
+            .products {
+                grid-template-columns: 1fr;
+            }
+            .product-card img {
+                height: 180px;
+            }
+            .product-info h3 {
+                font-size: 1rem;
+            }
+            .product-info p {
+                font-size: 0.8rem;
+            }
+            .product-info .price {
+                font-size: 1.2rem;
+            }
+        }
+
+        /* Стили для языкового переключателя */
+        .lang-switcher {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1000;
+        }
+        .lang-switcher-button {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 5px;
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .lang-switcher-button:hover {
+            background-color: #45a049;
+        }
+        .lang-options {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            display: none;
+            flex-direction: column;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+        .lang-options button {
+            padding: 8px 16px;
+            border: none;
+            background: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .lang-options button:hover {
+            background-color: #ddd;
+        }
+        .lang-switcher:hover .lang-options {
+            display: flex;
+        }
+
+        /* Стили для кнопки темной темы */
+        .theme-toggle-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            z-index: 1000;
+            background-color: #4CAF50;
+            color: white;
+            transition: background-color 0.3s ease;
+        }
+        .theme-toggle-btn:hover {
+            background-color: #45a049;
+        }
+        .theme-toggle-btn:focus {
+            outline: none;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Фиксированное положение для кнопок */
+        .fixed-buttons {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            right: 20px;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+        }
+    </style>
+</head>
+<body>
+
+<div class="fixed-buttons">
+    <!-- Языковой переключатель -->
+    <div class="lang-switcher">
+        <button class="lang-switcher-button" data-i18n="select_lang">Выберите язык</button>
+        <div class="lang-options">
+            <button onclick="setLanguage('uk')">Українська</button>
+            <button onclick="setLanguage('ru')">Русский</button>
+            <button onclick="setLanguage('en')">English</button>
+        </div>
+    </div>
+
+    <!-- Кнопка темной темы -->
+    <button id="theme-toggle" class="theme-toggle-btn">Темна тема</button>
+</div>
+
+<header data-aos="fade-down" data-aos-duration="1000">
+    <img src="photo_2025-04-12_18-09-22.jpg" alt="Style logo" style="width: 80px; height: auto; margin-bottom: 10px;">
+    <h1 data-i18n="title">Style</h1>
+    <p data-i18n="subtitle">Магазин модної та стильної одягу</p>
+</header>
+
+<section class="main-section">
+    <h2 data-aos="fade-up" data-aos-duration="1000" data-i18n="products_title">Наші Продукти</h2>
+    <div class="products">
+        <!-- Продукт 1 -->
+        <div class="product-card" data-aos="zoom-in" data-aos-duration="1000" data-aos-delay="100">
+            <img src="photo_2025-04-12_18-06-48.jpg" alt="Кофта">
+            <div class="product-info">
+                <h3 data-i18n="product1_name">Стильна кофта</h3>
+                <p data-i18n="product1_desc">М'яка та комфортна кофта для кожного сезону.</p>
+                <p class="price">₴550</p>
+                <button onclick="window.location.href='https://t.me/style_zt'" data-i18n="order_btn">Замовити</button>
+            </div>
+        </div>
+        <!-- Продукт 2 -->
+        <div class="product-card" data-aos="zoom-in" data-aos-duration="1000" data-aos-delay="200">
+            <img src="photo_2025-04-12_18-06-41.jpg" alt="Світлі кроси">
+            <div class="product-info">
+                <h3 data-i18n="product2_name">Світлі кроси</h3>
+                <p data-i18n="product2_desc">Яскравий кольор  для будь-якого настрою.</p>
+                <p class="price">₴700</p>
+                <button onclick="window.location.href='https://t.me/style_zt'" data-i18n="order_btn">Замовити</button>
+            </div>
+        </div>
+        <!-- Продукт 3 -->
+        <div class="product-card" data-aos="zoom-in" data-aos-duration="1000" data-aos-delay="400">
+            <img src="photo_2024-10-31_18-56-33.jpg" alt="Чорні кроси ">
+            <div class="product-info">
+                <h3 data-i18n="product3_name">Чорні кроси</h3>
+                <p data-i18n="product3_desc">Легкі та стильні для літа.</p>
+                <p class="price">₴700</p>
+                <button onclick="window.location.href='https://t.me/style_zt'" data-i18n="order_btn">Замовити</button>
+            </div>
+        </div>
+        <!-- Продукт 4 -->
+        <div class="product-card" data-aos="zoom-in" data-aos-duration="1000" data-aos-delay="500">
+            <img src="photo_2024-11-15_17-33-26.jpg" alt="Чоловічі труси" >
+            <div class="product-info">
+                <h3 data-i18n="product4_name">Елегантні  труси </h3>
+                <p data-i18n="product4_desc">Для особливих випадків та вечірок.</p>
+                <p class="price">₴100</p>
+                <button onclick="window.location.href='https://t.me/style_zt'" data-i18n="order_btn">Замовити</button>
+            </div>
+        </div>
+        <!-- Продукт 5 -->
+        <div class="product-card" data-aos="zoom-in" data-aos-duration="1000" data-aos-delay="600">
+            <img src="photo_2024-12-08_17-00-44.jpg" alt="Крабики для волосся">
+            <div class="product-info">
+                <h3 data-i18n="product5_name">Модні крабики</h3>
+                <p data-i18n="product5_desc">Крабики для повсякденного життя.</p>
+                <p class="price">₴50</p>
+                <button onclick="window.location.href='https://t.me/style_zt'" data-i18n="order_btn">Замовити</button>
+            </div>
+        </div>
+        <!-- Продукт 6 -->
+        <div class="product-card" data-aos="zoom-in" data-aos-duration="1000" data-aos-delay="700">
+            <img src="photo_2024-11-15_19-43-36.jpg" alt="Сірі капці">
+            <div class="product-info">
+                <h3 data-i18n="product6_name">Сірі капці</h3>
+                <p data-i18n="product6_desc">Комфортні та дуже пухнасті.</p>
+                <p class="price">₴500</p>
+                <button onclick="window.location.href='https://t.me/style_zt'" data-i18n="order_btn">Замовити</button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="contact-section">
+    <h2 data-i18n="contacts_title">Контакти та Технічна Підтримка</h2>
+    <ul>
+        <li data-i18n="phone">📱 Телефон: +380974086741 </li>
+        <li>📩 Style TG: <a href="https://t.me/vzytta_zt">Style</a></li>
+        <li>💬 Telegram: <a href="https://t.me/style_zt">TG</a></li>
+    </ul>
+    <h3 data-i18n="order_info">Для замовлення зв'яжіться з нами в Telegram</h3>
+</section>
+
+<footer data-aos="fade-up" data-aos-duration="1000" class="footer">
+    <p>&copy; 2025 Style. All rights reserved.</p>
+</footer>
+
+<!-- Подключаем скрипт для AOS -->
+<script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+<script>
+    // Инициализация AOS
+    AOS.init();
+</script>
+
+<!-- Языковой скрипт -->
+<script>
+    const translations = {
+        uk: {
+            title: "Style",
+            subtitle: "Магазин модної та стильної одягу",
+            products_title: "Наші Продукти",
+            product1_name: "Стильна кофта",
+            product1_desc: "М'яка та комфортна кофта для кожного сезону.",
+            product2_name: "Світлі кроси",
+            product2_desc: "Яскравий кольор  для будь-якого настрою.",
+            product3_name: "Чорні кроси",
+            product3_desc: "Легкі та стильні для літа.",
+            product4_name: "Елегантні  труси",
+            product4_desc: "Для особливих випадків та вечірок.",
+            product5_name: "Модні крабики",
+            product5_desc: "Крабики для повсякденного життя.",
+            product6_name: "Сірі капці",
+            product6_desc: "Комфортні та дуже пухнасті.",
+            order_btn: "Замовити",
+            contacts_title: "Контакти та Технічна Підтримка",
+            phone: "📱 Телефон: +380974086741",
+            order_info: "Для замовлення зв'яжіться з нами в Telegram",
+            theme_dark: "Темна тема",
+            theme_light: "Світла тема",
+            select_lang: "Виберіть мову"
+        },
+        ru: {
+            title: "Style",
+            subtitle: "Магазин модной и стильной одежды",
+            products_title: "Наши Продукты",
+            product1_name: "Стильная кофта",
+            product1_desc: "Мягкая и комфортная кофта для любого сезона.",
+            product2_name: "Светлые кроссовки",
+            product2_desc: "Яркий цвет для любого настроения.",
+            product3_name: "Чёрные кроссовки",
+            product3_desc: "Лёгкие и стильные для лета.",
+            product4_name: "Элегантные трусы",
+            product4_desc: "Для особых случаев и вечеринок.",
+            product5_name: "Модные крабики",
+            product5_desc: "Крабики для повседневной жизни.",
+            product6_name: "Серые тапки",
+            product6_desc: "Комфортные и очень пушистые.",
+            order_btn: "Заказать",
+            contacts_title: "Контакты и техническая поддержка",
+            phone: "📱 Телефон: +380974086741",
+            order_info: "Для заказа свяжитесь с нами в Telegram",
+            theme_dark: "Тёмная тема",
+            theme_light: "Светлая тема",
+             select_lang: "Выберите язык"
+        },
+        en: {
+            title: "Style",
+            subtitle: "Fashionable and stylish clothing store",
+            products_title: "Our Products",
+            product1_name: "Stylish Sweater",
+            product1_desc: "Soft and comfortable sweater for every season.",
+            product2_name: "Light Sneakers",
+            product2_desc: "Bright color for any mood.",
+            product3_name: "Black Sneakers",
+            product3_desc: "Light and stylish for summer.",
+            product4_name: "Elegant Underwear",
+            product4_desc: "For special occasions and parties.",
+            product5_name: "Trendy Hair Clips",
+            product5_desc: "Clips for everyday life.",
+            product6_name: "Grey Slippers",
+            product6_desc: "Comfortable and very fluffy.",
+            order_btn: "Order",
+            contacts_title: "Contacts & Support",
+            phone: "📱 Phone: +380974086741",
+            order_info: "To order, contact us in Telegram",
+            theme_dark: "Dark Theme",
+            theme_light: "Light Theme",
+            select_lang: "Select language"
+        }
+    };
+
+    function setLanguage(lang) {
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+            const key = el.getAttribute('data-i18n');
+            if (translations[lang][key]) {
+                el.textContent = translations[lang][key];
+            }
+        });
+        localStorage.setItem('lang', lang);
+
+         // Обновляем текст кнопки темы после смены языка
+         updateThemeButtonText();
+    }
+
+     function updateThemeButtonText() {
+            const savedTheme = localStorage.getItem('theme');
+            const savedLang = localStorage.getItem('lang') || 'uk';
+            const themeText = (savedTheme === 'dark') ? translations[savedLang].theme_light : translations[savedLang].theme_dark;
+            toggleBtn.textContent = themeText;
+        }
+
+    const toggleBtn = document.getElementById('theme-toggle');
+    const body = document.body;
+
+    toggleBtn.addEventListener('click', () => {
+        body.classList.toggle('dark');
+        if (body.classList.contains('dark')) {
+            toggleBtn.textContent = translations[localStorage.getItem('lang') || 'uk'].theme_light;
+        } else {
+            toggleBtn.textContent = translations[localStorage.getItem('lang') || 'uk'].theme_dark;
+        }
+        localStorage.setItem('theme', body.classList.contains('dark') ? 'dark' : 'light');
+    });
+
+    window.addEventListener('DOMContentLoaded', () => {
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'dark') {
+            body.classList.add('dark');
+        }
+
+        let savedLang = localStorage.getItem('lang') || 'uk';
+        setLanguage(savedLang);
+
+        if (body.classList.contains('dark')) {
+            toggleBtn.textContent = translations[savedLang].theme_light;
+        } else {
+            toggleBtn.textContent = translations[savedLang].theme_dark;
+        }
+    });
+</script>
+</body>
+</html>
